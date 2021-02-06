@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Play2ExcludedModulesSettings">
+    <option name="INFO">
+      <map>
+        <entry key="grid_tp_aguesse_jacquet_wiki">
+          <value>
+            <ProjectSettingsEntry>
+              <option name="playDistrPath" value="$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/com/typesafe/play/play_2.13/2.8.7/play_2.13-2.8.7.jar" />
+            </ProjectSettingsEntry>
+          </value>
+        </entry>
+        <entry key="play-scala-rest-api-example">
+          <value>
+            <ProjectSettingsEntry>
+              <option name="playDistrPath" value="$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/com/typesafe/play/play_2.13/2.8.7/play_2.13-2.8.7.jar" />
+            </ProjectSettingsEntry>
+          </value>
+        </entry>
+        <entry key="root">
+          <value>
+            <ProjectSettingsEntry>
+              <option name="confDir" value="C:\Users\peter\Documents\workspaceJ\Grid_TP_Aguesse_Jacquet_Wiki\app" />
+              <option name="templateImports">
+                <list>
+                  <option value="_root_.play.twirl.api.TwirlFeatureImports._" />
+                  <option value="_root_.play.twirl.api.TwirlHelperImports._" />
+                  <option value="_root_.play.twirl.api.Html" />
+                  <option value="_root_.play.twirl.api.JavaScript" />
+                  <option value="_root_.play.twirl.api.Txt" />
+                  <option value="_root_.play.twirl.api.Xml" />
+                </list>
+              </option>
+              <option name="routesImports">
+                <list>
+                  <option value="controllers.Assets.Asset" />
+                </list>
+              </option>
+              <option name="uri" value="/C:/Users/peter/Documents/workspaceJ/Grid_TP_Aguesse_Jacquet_Wiki" />
+            </ProjectSettingsEntry>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

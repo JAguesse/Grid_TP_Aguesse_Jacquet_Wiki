@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Grid_TP_Aguesse_Jacquet_Wiki.iml" filepath="$PROJECT_DIR$/.idea/Grid_TP_Aguesse_Jacquet_Wiki.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docs.iml" filepath="$PROJECT_DIR$/.idea/modules/docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gatling.iml" filepath="$PROJECT_DIR$/.idea/modules/gatling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/grid_tp_aguesse_jacquet_wiki.iml" filepath="$PROJECT_DIR$/.idea/modules/grid_tp_aguesse_jacquet_wiki.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/grid_tp_aguesse_jacquet_wiki-build.iml" filepath="$PROJECT_DIR$/.idea/modules/grid_tp_aguesse_jacquet_wiki-build.iml" />
     </modules>
   </component>
 </project>
