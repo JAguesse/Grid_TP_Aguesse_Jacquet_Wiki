@@ -2,7 +2,7 @@ import sbt.Keys._
 import play.sbt.PlaySettings
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayService, PlayLayoutPlugin, Common)
+  .enablePlugins(PlayService, PlayScala, PlayLayoutPlugin, Common)
   .settings(
     name := "grid_tp_aguesse_jacquet_wiki",
     scalaVersion := "2.13.1",
@@ -12,7 +12,7 @@ lazy val root = (project in file("."))
       "net.logstash.logback" % "logstash-logback-encoder" % "6.2",
       "io.lemonlabs" %% "scala-uri" % "1.5.1",
       "net.codingwell" %% "scala-guice" % "4.2.6",
-      "org.reactivemongo" %% "reactivemongo" % "1.0.2",
+      "org.mongodb.scala" %% "mongo-scala-driver" % "4.2.0",
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
     ),
     scalacOptions ++= Seq(

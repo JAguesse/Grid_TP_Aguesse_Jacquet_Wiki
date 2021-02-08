@@ -1,12 +1,14 @@
 package v1.post
 
 import javax.inject.{Inject, Singleton}
-
 import akka.actor.ActorSystem
+import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import play.api.libs.concurrent.CustomExecutionContext
 import play.api.{Logger, MarkerContext}
 
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
 
 final case class PostData(id: PostId, title: String, body: String)
 
@@ -48,35 +50,23 @@ class PostRepositoryImpl @Inject()()(implicit ec: PostExecutionContext)
 
   private val logger = Logger(this.getClass)
 
-  private val postList = List(
-    PostData(PostId("1"), "title 1", "blog post 1"),
-    PostData(PostId("2"), "title 2", "blog post 2"),
-    PostData(PostId("3"), "title 3", "blog post 3"),
-    PostData(PostId("4"), "title 4", "blog post 4"),
-    PostData(PostId("5"), "title 5", "blog post 5")
-  )
+  val mongoClient: MongoClient = MongoClient()
+  val database: MongoDatabase = mongoClient.getDatabase("wikidb")
+  // [PostData] was [Document]
+  val collection: MongoCollection[PostData] = database.getCollection("articles")
 
-  override def list()(
-      implicit mc: MarkerContext): Future[Iterable[PostData]] = {
-    Future {
-      logger.trace(s"list: ")
-      postList
-    }
+  override def list()(implicit mc: MarkerContext): Future[Iterable[PostData]] = {
+    logger.trace("The list was asked")
+    collection.find().toFuture()
   }
 
-  override def get(id: PostId)(
-      implicit mc: MarkerContext): Future[Option[PostData]] = {
-    Future {
-      logger.trace(s"get: id = $id")
-      postList.find(post => post.id == id)
-    }
+  override def get(id: PostId)(implicit mc: MarkerContext): Future[Option[PostData]] = {
+    logger.trace(s"get: id = $id")
+    collection.find(equal("id", id)).first().toFuture()
   }
 
   def create(data: PostData)(implicit mc: MarkerContext): Future[PostId] = {
-    Future {
-      logger.trace(s"create: data = $data")
-      data.id
-    }
+    collection.insertOne(data).toFuture().
   }
 
 }

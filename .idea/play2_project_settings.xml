@@ -20,6 +20,7 @@
         <entry key="root">
           <value>
             <ProjectSettingsEntry>
+              <option name="sourceDir" value="C:\Users\peter\Documents\workspaceJ\Grid_TP_Aguesse_Jacquet_Wiki\app" />
               <option name="confDir" value="C:\Users\peter\Documents\workspaceJ\Grid_TP_Aguesse_Jacquet_Wiki\app" />
               <option name="templateImports">
                 <list>
@@ -29,6 +30,13 @@
                   <option value="_root_.play.twirl.api.JavaScript" />
                   <option value="_root_.play.twirl.api.Txt" />
                   <option value="_root_.play.twirl.api.Xml" />
+                  <option value="models._" />
+                  <option value="controllers._" />
+                  <option value="play.api.i18n._" />
+                  <option value="views.xml._" />
+                  <option value="play.api.templates.PlayMagic._" />
+                  <option value="play.api.mvc._" />
+                  <option value="play.api.data._" />
                 </list>
               </option>
               <option name="routesImports">

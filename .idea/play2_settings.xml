@@ -8,6 +8,7 @@
         <option value="_root_.play.twirl.api.Html" />
         <option value="_root_.play.twirl.api.TwirlHelperImports._" />
         <option value="_root_.play.twirl.api.TwirlFeatureImports._" />
+        <option value="play.api.templates.PlayMagic._" />
         <option value="_root_.play.twirl.api.Txt" />
       </array>
     </option>
