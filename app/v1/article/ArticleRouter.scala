@@ -1,4 +1,4 @@
-package v1.post
+package v1.article
 
 import javax.inject.Inject
 
@@ -9,12 +9,13 @@ import play.api.routing.sird._
 /**
   * Routes and URLs to the PostResource controller.
   */
-class PostRouter @Inject()(controller: PostController) extends SimpleRouter {
-  val prefix = "/v1/posts"
+class ArticleRouter @Inject()(controller: ArticleController) extends SimpleRouter {
 
-  def link(id: PostId): String = {
+  val prefix = "/v1/articles"
+
+  def link(id: String): String = {
     import io.lemonlabs.uri.dsl._
-    val url = prefix / id.toString
+    val url = prefix / id
     url.toString()
   }
 
@@ -23,7 +24,10 @@ class PostRouter @Inject()(controller: PostController) extends SimpleRouter {
       controller.index
 
     case POST(p"/") =>
-      controller.process
+      controller.process(null)
+
+    case PUT(p"/$id") =>
+      controller.process(id)
 
     case GET(p"/$id") =>
       controller.show(id)
