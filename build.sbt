@@ -13,6 +13,7 @@ lazy val root = (project in file("."))
       "io.lemonlabs" %% "scala-uri" % "1.5.1",
       "net.codingwell" %% "scala-guice" % "4.2.6",
       "org.mongodb.scala" %% "mongo-scala-driver" % "4.2.0",
+      "org.apache.kafka" % "kafka-clients" % "2.7.0",
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
     ),
     scalacOptions ++= Seq(

@@ -6,6 +6,7 @@ import play.api.MarkerContext
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 import v1.models.Article
+import v1.producer.KafkaProducerImplemented
 
 /**
   * DTO for displaying article information.
@@ -23,13 +24,14 @@ object ArticleResource {
 /**
   * Controls access to the backend data, returning [[ArticleResource]]
   */
-class ArticleResourceHandler @Inject()(
-                                        routerProvider: Provider[ArticleRouter],
-                                        postRepository: ArticleRepository)(implicit ec: ExecutionContext) {
+class ArticleResourceHandler @Inject()(routerProvider: Provider[ArticleRouter], postRepository: ArticleRepository)(implicit ec: ExecutionContext) {
+
+  val kafkaProducer = new KafkaProducerImplemented
 
   def create(postInput: ArticleFormInput)(implicit mc: MarkerContext): Future[ArticleResource] = {
     val createData = Article(postInput.title, postInput.body)
     postRepository.create(createData)
+    kafkaProducer.sendEvent(createData._id.toString, createData)
     // To simplify, we don't wait for the return : the result will be logged
     Future{
       createArticleResource(createData)
@@ -39,6 +41,7 @@ class ArticleResourceHandler @Inject()(
   def update(id: String, articleInput: ArticleFormInput)(implicit mc: MarkerContext): Future[ArticleResource] = {
     val updateData = Article(articleInput.title, articleInput.body)
     postRepository.update(id, updateData)
+    kafkaProducer.sendEvent(updateData._id.toString, updateData)
     Future{
       createArticleResource(updateData)
     }

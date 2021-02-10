@@ -78,7 +78,6 @@ class ArticleRepositoryImpl @Inject()()(implicit ec: ArticleExecutionContext) ex
 
   def update(id: String, article: Article)(implicit mc: MarkerContext) : Unit = {
     logger.trace(s"update() : $id")
-    logger.trace(s"update() : $article")
     val values = combine(set("title", article.title), set("body", article.body))
     collection.updateOne(equal("_id",new ObjectId(id)), values).subscribe(new Observer[UpdateResult] {
 
