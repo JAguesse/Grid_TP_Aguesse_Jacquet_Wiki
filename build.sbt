@@ -1,5 +1,4 @@
 import sbt.Keys._
-import play.sbt.PlaySettings
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayService, PlayScala, PlayLayoutPlugin, Common)
@@ -22,7 +21,6 @@ lazy val root = (project in file("."))
       "-Xfatal-warnings"
     )
   )
-
 lazy val gatlingVersion = "3.3.1"
 lazy val gatling = (project in file("gatling"))
   .enablePlugins(GatlingPlugin)

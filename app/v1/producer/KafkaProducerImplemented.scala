@@ -1,13 +1,10 @@
 package v1.producer
 
-import com.fasterxml.jackson.databind.ser.std.StringSerializer
-import play.api.MarkerContext
 import v1.models.Article
 
 import java.util.Properties
-import scala.concurrent.Future
-
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.kafka.common.serialization.StringSerializer
 
 class KafkaProducerImplemented {
 
@@ -21,10 +18,10 @@ class KafkaProducerImplemented {
 
   val TOPIC = "articletopic"
 
-  val producer = new KafkaProducer[String, Article](kafkaProducerProps)
+  val producer = new KafkaProducer[String, String](kafkaProducerProps)
 
   def sendEvent(id : String, article: Article): Unit = {
-    producer.send(new ProducerRecord[String, Article](TOPIC, id, article))
+    producer.send(new ProducerRecord[String, String](TOPIC, id, article.body))
   }
 
 }
