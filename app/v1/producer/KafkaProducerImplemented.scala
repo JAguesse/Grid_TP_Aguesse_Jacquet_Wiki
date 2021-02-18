@@ -10,7 +10,7 @@ class KafkaProducerImplemented {
 
   val kafkaProducerProps: Properties = {
     val props = new Properties()
-    props.put("bootstrap.servers", "localhost:9092")
+    props.put("bootstrap.servers", "172.23.127.117:9092")
     props.put("key.serializer", classOf[StringSerializer].getName)
     props.put("value.serializer", classOf[StringSerializer].getName)
     props
@@ -20,8 +20,8 @@ class KafkaProducerImplemented {
 
   val producer = new KafkaProducer[String, String](kafkaProducerProps)
 
-  def sendEvent(id : String, article: Article): Unit = {
-    producer.send(new ProducerRecord[String, String](TOPIC, id, article.body))
+  def sendEvent(id : String, data: String): Unit = {
+    producer.send(new ProducerRecord[String, String](TOPIC, id, data))
   }
 
 }

@@ -1,12 +1,14 @@
 package v1.article
 
 import javax.inject.{Inject, Provider}
-import play.api.MarkerContext
+import play.api.{Logger, MarkerContext}
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 import v1.models.Article
 import v1.producer.KafkaProducerImplemented
+
+import scala.util.{Failure, Success}
 
 /**
   * DTO for displaying article information.
@@ -26,10 +28,12 @@ object ArticleResource {
   */
 class ArticleResourceHandler @Inject()(routerProvider: Provider[ArticleRouter], articleRepository: ArticleRepository, kafkaProducer : KafkaProducerImplemented)(implicit ec: ExecutionContext) {
 
+  private val logger = Logger(this.getClass)
+
   def create(postInput: ArticleFormInput)(implicit mc: MarkerContext): Future[ArticleResource] = {
     val createData = Article(postInput.title, postInput.body)
     articleRepository.create(createData)
-    kafkaProducer.sendEvent(createData._id.toString, createData)
+    kafkaProducer.sendEvent(createData._id.toString, createData.title)
     // To simplify, we don't wait for the return : the result will be logged
     Future{
       createArticleResource(createData)
@@ -38,11 +42,29 @@ class ArticleResourceHandler @Inject()(routerProvider: Provider[ArticleRouter], 
 
   def update(id: String, articleInput: ArticleFormInput)(implicit mc: MarkerContext): Future[ArticleResource] = {
     val updateData = Article(articleInput.title, articleInput.body)
-    articleRepository.update(id, updateData)
-    kafkaProducer.sendEvent(updateData._id.toString, updateData)
-    Future{
-      createArticleResource(updateData)
+    articleRepository.get(id) onComplete{
+      case Success(value) => {
+        if(value.isDefined && !articleInput.title.equals(value.get.title)){
+          logger.trace(s"New title written : $value")
+          articleRepository.update(id, updateData)
+          val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"title\": " + updateData.title + "}})"
+          kafkaProducer.sendEvent(updateData._id.toString, event)
+        }
+        if(value.isDefined && !articleInput.body.equals(value.get.body)){
+          logger.trace(s"New body written : $value")
+          articleRepository.update(id, updateData)
+          val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"body\": " + updateData.body + "}})"
+          kafkaProducer.sendEvent(updateData._id.toString, event)
+        }
+        if(value.isEmpty){
+          logger.trace("Error : Id not found")
+        }
+      }
+      case Failure(e) => {
+        e.printStackTrace()
+      }
     }
+    Future{createArticleResource(updateData)}
   }
 
   // Return a specific article
