@@ -10,7 +10,7 @@ class KafkaProducerImplemented {
 
   val kafkaProducerProps: Properties = {
     val props = new Properties()
-    props.put("bootstrap.servers", "172.23.127.117:9092")
+    props.put("bootstrap.servers", "172.30.217.30:9092")
     props.put("key.serializer", classOf[StringSerializer].getName)
     props.put("value.serializer", classOf[StringSerializer].getName)
     props

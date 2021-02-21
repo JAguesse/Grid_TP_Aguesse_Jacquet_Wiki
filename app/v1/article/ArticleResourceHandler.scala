@@ -33,7 +33,8 @@ class ArticleResourceHandler @Inject()(routerProvider: Provider[ArticleRouter], 
   def create(postInput: ArticleFormInput)(implicit mc: MarkerContext): Future[ArticleResource] = {
     val createData = Article(postInput.title, postInput.body)
     articleRepository.create(createData)
-    kafkaProducer.sendEvent(createData._id.toString, createData.title)
+    val event = "db.collection.insertOne( { _id = ObjectId(\"" + createData._id + "\") ,title: \"" + createData.title + "\", body: \"" + createData.body + "\"})"
+    kafkaProducer.sendEvent(createData._id.toString, event)
     // To simplify, we don't wait for the return : the result will be logged
     Future{
       createArticleResource(createData)
@@ -44,19 +45,30 @@ class ArticleResourceHandler @Inject()(routerProvider: Provider[ArticleRouter], 
     val updateData = Article(articleInput.title, articleInput.body)
     articleRepository.get(id) onComplete{
       case Success(value) => {
-        if(value.isDefined && !articleInput.title.equals(value.get.title)){
-          logger.trace(s"New title written : $value")
-          articleRepository.update(id, updateData)
-          val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"title\": " + updateData.title + "}})"
-          kafkaProducer.sendEvent(updateData._id.toString, event)
+        if(value.isDefined){
+          if(!articleInput.title.equals(value.get.title) && !articleInput.body.equals(value.get.body)){
+            logger.trace(s"New title and body written : $value")
+            logger.trace(s"Old title and body written : $articleInput")
+            articleRepository.update(id, updateData)
+            val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"title\": \"" + updateData.title + "\", \"body\": \"" + updateData.body +  "\"}})"
+            kafkaProducer.sendEvent(updateData._id.toString, event)
+          }
+          else{
+            if(!articleInput.title.equals(value.get.title)){
+              logger.trace(s"New title written : $value")
+              articleRepository.update(id, updateData)
+              val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"title\": \"" + updateData.title + "\"}})"
+              kafkaProducer.sendEvent(updateData._id.toString, event)
+            }
+            if(!articleInput.body.equals(value.get.body)){
+              logger.trace(s"New body written : $value")
+              articleRepository.update(id, updateData)
+              val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"body\": \"" + updateData.body + "\"}})"
+              kafkaProducer.sendEvent(updateData._id.toString, event)
+            }
+          }
         }
-        if(value.isDefined && !articleInput.body.equals(value.get.body)){
-          logger.trace(s"New body written : $value")
-          articleRepository.update(id, updateData)
-          val event = "db.collection.updateOne(_id = ObjectId(\"" + id + "\"), {$set: {\"body\": " + updateData.body + "}})"
-          kafkaProducer.sendEvent(updateData._id.toString, event)
-        }
-        if(value.isEmpty){
+        else {
           logger.trace("Error : Id not found")
         }
       }

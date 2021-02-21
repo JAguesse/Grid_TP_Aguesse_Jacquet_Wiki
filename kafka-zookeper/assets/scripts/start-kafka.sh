@@ -20,7 +20,9 @@ if [ ! -z "$ADVERTISED_HOST_CMD" ]; then
 fi
 
 if [ ! -z "$ADVERTISED_HOST" ]; then
+	$ADVERTISED_HOST="PLAINTEXT://localhost:9092"
     echo "advertised host: $ADVERTISED_HOST"
+
     # Uncomment advertised.listeners
     sed -r -i 's/^(#)(advertised.listeners)/\2/g' $KAFKA_HOME/config/server.properties
 
