@@ -2,7 +2,7 @@
 Justin Aguesse, Pierre Jacquet
 
 Cette architecture expose un service REST de création, lecture et modification d'article. Le service est écrit en Scala et est exposé par défaut sur le port 9000.
-Les articles sont stockés dans MongoDB, tout changement de leur état (i.e création/modification) entraîne la publication d'un évènement Kafka contenant la commande Mongoshell a passé pour obtenir le même contexte.
+Les articles sont stockés dans MongoDB, tout changement de leur état (i.e création/modification) entraîne la publication d'un évènement Kafka contenant la commande Mongoshell à passer pour obtenir le même contexte.
 
 ## Endpoint
 
@@ -20,4 +20,10 @@ Exemple de body :
     "title":"Perruche",
     "body":"Perruche est un nom vernaculaire donné à plusieurs lignées d'oiseaux appartenant à l'Ordre des psittaciformes (en langue vernaculaire, perroquets)"
 }
+```
+
+Exemple d'évènements publiés : 
+```bash
+db.collection.insertOne( { _id = ObjectId("6033b4ebb79647185bab67cd") ,title: "Tulipe", body: "Les tulipes forment un genre (Tulipa) de plantes herbacées de la famille des Liliacées"})
+db.collection.updateOne(_id = ObjectId("6033b4ebb79647185bab67cd"), {$set: {"title": "Tulipes"}})
 ```
